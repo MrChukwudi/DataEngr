@@ -452,3 +452,35 @@ GROUP BY o.order_id,
 -- Dropping an Index:
 
 DROP INDEX [index_name];
+
+
+-- Adding a Foreign Key to a Table After the Table had already been created:
+ALTER TABLE order_items
+ADD 
+FOREIGN KEY (order_item_order_id) --Which column to make the foreign key
+REFERENCES orders (order_id); -- Which table are we refering to (which column in the reference table);
+
+COMMIT;
+
+
+SELECT COUNT(*) 
+FROM orders AS o
+	JOIN order_items AS oi
+		ON o.order_id = oi.order_item_order_id
+WHERE o.order_customer_id IN (5, 7, 3);
+
+
+
+-- Altering orders Table to add a Foreign Key on order_customer_id to reference customers table:
+ALTER TABLE orders
+	ADD FOREIGN KEY (order_customer_id)
+	REFERENCES customers (customer_id);
+COMMIT;
+
+-- Adding Indexes to our orders Tables:
+CREATE INDEX order_order_cust_id_indx
+ON orders (order_customer_id);
+
+-- Adding Indexes to our order_items Tables:
+CREATE INDEX order_items_ord_id.indx
+ON order_items (order_item_order_id)
